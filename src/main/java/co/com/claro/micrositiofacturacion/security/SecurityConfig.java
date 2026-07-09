@@ -22,7 +22,7 @@ public class SecurityConfig {
                 .exceptionHandling(ex -> ex.accessDeniedHandler(endpointAccessDeniedHandler))
                 .authorizeHttpRequests(auth -> auth
                         .dispatcherTypeMatchers(DispatcherType.ASYNC, DispatcherType.ERROR).permitAll()
-                        .requestMatchers("/api/facturacion/**").hasAuthority("ROLE_SOPORTE_ADMIN")
+                        .requestMatchers("/api/facturacion/**").hasAuthority("ROLE_SOPORTE_N3")
                         .anyRequest().permitAll())
                 .addFilterBefore(facturacionJwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
