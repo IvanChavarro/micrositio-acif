@@ -9,7 +9,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>co.com.claro</groupId>
-    <artifactId>micrositio-facturacion</artifactId>
+    <artifactId>micrositio-acif</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>micrositio-facturacion</name>
     <description>micrositio-facturacion</description>

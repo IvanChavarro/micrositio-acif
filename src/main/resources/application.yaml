@@ -1,6 +1,6 @@
 spring:
   application:
-    name: facturacion
+    name: acif
 
   mvc:
     async:
