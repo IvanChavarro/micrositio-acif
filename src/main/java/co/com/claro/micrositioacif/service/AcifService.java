@@ -10,4 +10,7 @@ public interface AcifService {
     PageResponseDTO<AcifSerialesDTO> findSerialesByIdCargue(Long idCargueFk, Integer page, Integer size);
     StreamingResponseBody generateBaseActasCsv(Long idCargueFk);
     StreamingResponseBody generateSerialesCsv(Long idCargueFk);
+    String liberarSeriales(Long idSerial);
+    String marcarSeriales(Long idActa, Long idSerial);
+
 }

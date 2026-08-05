@@ -101,6 +101,48 @@ public class AcifServiceImpl implements AcifService {
         return response;
     }
 
+    @Override
+    public String liberarSeriales(Long idSerial) {
+        log.info("Liberando serial ACIF idSerial={}", idSerial);
+        int updatedRows = acifSerialesRepo.liberarSerial(idSerial);
+
+        if (updatedRows == 0) {
+            log.warn("No se encontró serial ACIF para liberar, idSerial={}", idSerial);
+            throw new AcifResultNotFoundException(idSerial);
+        }
+
+        String response = "Serial liberado correctamente";
+        auditLogService.saveAuditLog(AuditLog.builder()
+                .executionCommand("liberó serial ACIF")
+                .responseService(response)
+                .payload(CastUtil.serializeAuditPayload(Map.of("idSerial", idSerial)))
+                .build());
+
+        return response;
+    }
+
+    @Override
+    public String marcarSeriales(Long idActa, Long idSerial) {
+        log.info("Marcando serial ACIF idSerial={} con idActa={}", idSerial, idActa);
+        int updatedRows = acifSerialesRepo.marcarSerial(idActa, idSerial);
+
+        if (updatedRows == 0) {
+            log.warn("No se encontró serial ACIF para marcar, idSerial={}", idSerial);
+            throw new AcifResultNotFoundException(idSerial);
+        }
+
+        String response = "Serial marcado correctamente";
+        auditLogService.saveAuditLog(AuditLog.builder()
+                .executionCommand("marcó serial ACIF")
+                .responseService(response)
+                .payload(CastUtil.serializeAuditPayload(Map.of(
+                        "idActa", idActa,
+                        "idSerial", idSerial)))
+                .build());
+
+        return response;
+    }
+
     private Pageable buildPageable(Integer page, Integer size, String sortProperty) {
         int normalizedPage = page == null || page < 0 ? DEFAULT_PAGE : page;
         int normalizedSize = normalizeSize(size);

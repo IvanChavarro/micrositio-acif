@@ -18,7 +18,7 @@ import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 @RestController
-@RequestMapping("api/acif")
+@RequestMapping("api")
 public class AcifController {
 
     private static final DateTimeFormatter CSV_FILE_TIMESTAMP = DateTimeFormatter.ofPattern("yyyyMMdd-HHmmss");
@@ -29,7 +29,7 @@ public class AcifController {
         this.acifService = acifService;
     }
 
-    @GetMapping("/acif/base-actas/{idCargueFk}")
+    @GetMapping("/base-actas/{idCargueFk}")
     public ResponseEntity<PageResponseDTO<AcifBaseActasDTO>> findBaseActasByIdCargue(
             @PathVariable("idCargueFk") Long idCargueFk,
             @RequestParam(defaultValue = "0") Integer page,
@@ -37,7 +37,7 @@ public class AcifController {
         return ResponseEntity.ok(acifService.findBaseActasByIdCargue(idCargueFk, page, size));
     }
 
-    @GetMapping("/acif/seriales/{idCargueFk}")
+    @GetMapping("/seriales/{idCargueFk}")
     public ResponseEntity<PageResponseDTO<AcifSerialesDTO>> findAcifSerialByIdCargue(
             @PathVariable("idCargueFk") Long idCargueFk,
             @RequestParam(defaultValue = "0") Integer page,
@@ -45,7 +45,7 @@ public class AcifController {
         return ResponseEntity.ok(acifService.findSerialesByIdCargue(idCargueFk, page, size));
     }
 
-    @GetMapping("/acif/base-actas/{idCargueFk}/csv")
+    @GetMapping("/base-actas/{idCargueFk}/csv")
     public ResponseEntity<StreamingResponseBody> generateBaseActasCsv(
             @PathVariable("idCargueFk") Long idCargueFk) {
         return csvResponse(
@@ -53,12 +53,22 @@ public class AcifController {
                 acifService.generateBaseActasCsv(idCargueFk));
     }
 
-    @GetMapping("/acif/seriales/{idCargueFk}/csv")
+    @GetMapping("/seriales/{idCargueFk}/csv")
     public ResponseEntity<StreamingResponseBody> generateSerialesCsv(
             @PathVariable("idCargueFk") Long idCargueFk) {
         return csvResponse(
                 "acif-seriales-" + idCargueFk,
                 acifService.generateSerialesCsv(idCargueFk));
+    }
+
+    @GetMapping("/liberar-seriales/{idSerial}")
+    public ResponseEntity<String> generateLiberarSeriales(@PathVariable Long idSerial) {
+        return ResponseEntity.ok(acifService.liberarSeriales(idSerial));
+    }
+
+    @GetMapping("/marcar-seriales/{idActa}/{idSerial}")
+    public ResponseEntity<String> generateMarcarSeriales(@PathVariable Long idActa, @PathVariable Long idSerial) {
+        return ResponseEntity.ok(acifService.marcarSeriales(idActa, idSerial));
     }
 
     private ResponseEntity<StreamingResponseBody> csvResponse(
