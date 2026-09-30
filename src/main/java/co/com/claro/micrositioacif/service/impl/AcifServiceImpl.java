@@ -29,6 +29,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.lang.reflect.Field;
+import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
@@ -140,6 +141,40 @@ public class AcifServiceImpl implements AcifService {
                         "idSerial", idSerial)))
                 .build());
 
+        return response;
+    }
+
+    @Override
+    public String corregirQty(Long idBaseActas, BigDecimal qtyFinal) {
+        int updatedRows = acifBaseActasRepo.corregirQty(idBaseActas, qtyFinal);
+        if (updatedRows == 0) {
+            throw new AcifResultNotFoundException("No se encontro acta ACIF para idBaseActas: " + idBaseActas);
+        }
+
+        String response = "QTY_FINAL corregido correctamente";
+        auditLogService.saveAuditLog(AuditLog.builder()
+                .executionCommand("corrigio QTY_FINAL de acta ACIF")
+                .responseService(response)
+                .payload(CastUtil.serializeAuditPayload(Map.of(
+                        "idBaseActas", idBaseActas, "qtyFinal", qtyFinal)))
+                .build());
+        return response;
+    }
+
+    @Override
+    public String corregirQtyYVr(Long idBaseActas, BigDecimal qtyFinal, BigDecimal vrFinal) {
+        int updatedRows = acifBaseActasRepo.corregirQtyYVr(idBaseActas, qtyFinal, vrFinal);
+        if (updatedRows == 0) {
+            throw new AcifResultNotFoundException("No se encontro acta ACIF para idBaseActas: " + idBaseActas);
+        }
+
+        String response = "QTY_FINAL y VR_FINAL corregidos correctamente";
+        auditLogService.saveAuditLog(AuditLog.builder()
+                .executionCommand("corrigio QTY_FINAL y VR_FINAL de acta ACIF")
+                .responseService(response)
+                .payload(CastUtil.serializeAuditPayload(Map.of(
+                        "idBaseActas", idBaseActas, "qtyFinal", qtyFinal, "vrFinal", vrFinal)))
+                .build());
         return response;
     }
 

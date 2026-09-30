@@ -9,12 +9,14 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
 import java.nio.charset.StandardCharsets;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 @RestController
@@ -69,6 +71,23 @@ public class AcifController {
     @GetMapping("/marcar-seriales/{idActa}/{idSerial}")
     public ResponseEntity<String> generateMarcarSeriales(@PathVariable Long idActa, @PathVariable Long idSerial) {
         return ResponseEntity.ok(acifService.marcarSeriales(idActa, idSerial));
+    }
+
+
+
+    @PatchMapping("/base-actas/{idBaseActas}/qty")
+    public ResponseEntity<String> corregirQty(
+            @PathVariable("idBaseActas") Long idBaseActas,
+            @RequestParam("qtyFinal") BigDecimal qtyFinal) {
+        return ResponseEntity.ok(acifService.corregirQty(idBaseActas, qtyFinal));
+    }
+
+    @PatchMapping("/base-actas/{idBaseActas}/qty-vr")
+    public ResponseEntity<String> corregirQtyYVr(
+            @PathVariable("idBaseActas") Long idBaseActas,
+            @RequestParam("qtyFinal") BigDecimal qtyFinal,
+            @RequestParam("vrFinal") BigDecimal vrFinal) {
+        return ResponseEntity.ok(acifService.corregirQtyYVr(idBaseActas, qtyFinal, vrFinal));
     }
 
     private ResponseEntity<StreamingResponseBody> csvResponse(
